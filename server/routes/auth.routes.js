@@ -21,7 +21,7 @@ router.post('/login', loginLimiter, [emailRule, passwordRule], async (req, res, 
     if (body?.ok && body?.user?.id) {
       const isProd = process.env.NODE_ENV === 'production';
       res.cookie('uid', body.user.id, {
-        httpOnly: true, secure: isProd, sameSite: "none", path: '/',
+        httpOnly: true, secure: true, sameSite: 'none', path: '/',
         maxAge: 7 * 24 * 3600 * 1000,
       });
     }

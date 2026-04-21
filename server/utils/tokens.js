@@ -21,8 +21,8 @@ function setAuthCookies(res, accessToken, refreshToken) {
   const isProd = process.env.NODE_ENV === 'production';
   const common = {
     httpOnly: true,
-    secure: isProd,
-    sameSite: "none",
+    secure: true,
+    sameSite: 'none',
     path: '/',
   };
   res.cookie('access_token', accessToken, { ...common, maxAge: 15 * 60 * 1000 });
