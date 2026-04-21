@@ -22,7 +22,7 @@ function setAuthCookies(res, accessToken, refreshToken) {
   const common = {
     httpOnly: true,
     secure: isProd,
-    sameSite: isProd ? 'strict' : 'lax',
+    sameSite: "none",
     path: '/',
   };
   res.cookie('access_token', accessToken, { ...common, maxAge: 15 * 60 * 1000 });
