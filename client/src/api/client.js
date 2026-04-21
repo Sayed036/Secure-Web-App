@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: 'https://secure-web-app-s12c.onrender.com/api',
   withCredentials: true,
   timeout: 15000,
 });
