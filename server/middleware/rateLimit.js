@@ -1,11 +1,18 @@
 const rateLimit = require('express-rate-limit');
 
+// Render sets X-Real-IP — use that instead of X-Forwarded-For (which can be spoofed)
+const realIp = (req) =>
+  req.headers['x-real-ip'] ||
+  req.socket.remoteAddress ||
+  req.ip;
+
 // 300 requests / 15 min per IP — global safety net
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 300,
   standardHeaders: true,
   legacyHeaders: false,
+  keyGenerator: realIp,
   message: { error: 'Too many requests, slow down.' },
 });
 
@@ -14,6 +21,7 @@ const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 5,
   skipSuccessfulRequests: true,
+  keyGenerator: realIp,
   message: { error: 'Too many login attempts. Try again later.' },
 });
 
@@ -21,6 +29,7 @@ const loginLimiter = rateLimit({
 const registerLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   max: 5,
+  keyGenerator: realIp,
   message: { error: 'Too many accounts created from this IP.' },
 });
 
@@ -28,6 +37,7 @@ const registerLimiter = rateLimit({
 const otpSendLimiter = rateLimit({
   windowMs: 10 * 60 * 1000,
   max: 3,
+  keyGenerator: realIp,
   message: { error: 'Too many OTP requests. Wait a bit.' },
 });
 
@@ -35,6 +45,7 @@ const otpSendLimiter = rateLimit({
 const otpVerifyLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10,
+  keyGenerator: realIp,
   message: { error: 'Too many OTP verification attempts.' },
 });
 
@@ -42,6 +53,7 @@ const otpVerifyLimiter = rateLimit({
 const uploadLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   max: 20,
+  keyGenerator: realIp,
   message: { error: 'Upload limit reached.' },
 });
 
